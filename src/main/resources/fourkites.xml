@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jms="http://www.springframework.org/schema/integration/jms"
+       xmlns:integration="http://www.springframework.org/schema/integration"
+       xmlns:integration-http="http://www.springframework.org/schema/integration/http"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd">
+
+
+
+    <integration:channel id="fourkiteChannel"/>
+
+
+    <!-- Setup -->
+
+    <integration-http:inbound-gateway id="fourkiteInboundGateway"
+                                      path="/restfullservices/fourkites"
+                                      supported-methods="POST"
+                                      request-channel="fourkiteChannel"
+                                      request-payload-type="com.transplace.tracking.fourkites.beans.StopUpdate">
+
+        <integration-http:request-mapping consumes="application/json" produces="application/json" />
+
+
+    </integration-http:inbound-gateway>
+
+    <integration:service-activator
+            id="fourkiteServiceActivator"
+            input-channel="fourkiteChannel"
+            ref="fourkitesService" method="process"/>
+
+
+
+
+    <jms:message-driven-channel-adapter
+            id="fourkiteJMSAdapater"
+            destination="fourkitesQueue"
+            connection-factory="jmsConnectionFactory"
+            channel="fourkiteChannel"/>
+
+
+
+
+
+
+</beans>

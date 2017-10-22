@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jms="http://www.springframework.org/schema/integration/jms"
+       xmlns:integration="http://www.springframework.org/schema/integration"
+       xmlns:integration-http="http://www.springframework.org/schema/integration/http"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd">
+
+
+    <integration-http:inbound-gateway id="macropointInboundGateway"
+                                      path="/restfullservices/macropoint"
+                                      supported-methods="POST"
+                                      request-channel="macroChannel" request-payload-type="com.transplace.tracking.fourkites.beans.StopUpdate">
+
+        <integration-http:request-mapping consumes="application/json" produces="application/json" />
+
+    </integration-http:inbound-gateway>
+
+
+
+    <jms:message-driven-channel-adapter
+            id="macropointJMSAdapater"
+            destination="macropointQueue"
+            connection-factory="jmsConnectionFactory"
+            channel="fourkiteChannel"/>
+
+    <integration:channel id="macroChannel"/>
+
+    <integration:service-activator
+            id="macroServiceActivator"
+            input-channel="macroChannel"
+            ref="macroService" method="sayHello"/>
+
+</beans>
