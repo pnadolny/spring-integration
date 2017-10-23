@@ -8,7 +8,6 @@
 
 
 
-    <integration:channel id="fourkiteChannel"/>
 
 
     <!-- Setup -->
@@ -23,6 +22,12 @@
 
 
     </integration-http:inbound-gateway>
+
+    <integration:channel id="fourkiteChannel"/>
+
+
+    <integration:logging-channel-adapter id="logging" channel="fourkiteChannel" level="INFO" log-full-message="true"/>
+
 
     <integration:service-activator
             id="fourkiteServiceActivator"

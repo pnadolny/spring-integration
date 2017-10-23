@@ -17,6 +17,8 @@
     </integration-http:inbound-gateway>
 
 
+    <integration:logging-channel-adapter id="logging" channel="macroChannel" level="INFO" log-full-message="true"/>
+
 
     <jms:message-driven-channel-adapter
             id="macropointJMSAdapater"
