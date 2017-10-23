@@ -7,6 +7,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd">
 
 
+    <!-- Http Inbound Components -->
+    <!-- To receive messages over HTTP, you need to use an HTTP Inbound Channel Adapter or Gateway -->
+    <!-- By default the gateway will simply acknowledge that the request was received by sending a 200 status code back. -->
 
     <integration-http:inbound-gateway id="fourkiteInboundGateway"
                                       path="/restfullservices/fourkites"
@@ -16,8 +19,17 @@
         <integration-http:request-mapping consumes="application/json" produces="application/json" />
     </integration-http:inbound-gateway>
 
-    <!-- Recommend to set capacity and not setup an unbound queue-->
+
+
+    <!-- CHANNEL -->
+    <!-- point-to-point semantics -->
+
+    <!-- By default Messages are stored in-memory using org.springframework.integration.store.SimpleMessageStore,
+    an implementation of MessageStore. That might be fine for development or simple low-volume environments where
+    the potential loss of non-persistent messages is not a concern. -->
+
     <integration:channel id="fourkiteQueueChannel">
+        <!-- Recommend to set capacity and not setup an unbound queue-->
         <integration:queue capacity="100"></integration:queue>
     </integration:channel>
 
@@ -28,8 +40,9 @@
             id="fourkiteServiceActivator"
             input-channel="fourkiteQueueChannel"
             ref="fourkitesService" method="process">
-
-        <integration:poller fixed-rate="5000"/>
+        <!-- Polling task will be invoked 10 times per poll or until it returns null
+            thus possibly producing 10 Messages per poll while each poll happens at 1 second intervals. -->
+        <integration:poller fixed-rate="1000" max-messages-per-poll="10"/>
     </integration:service-activator>
 
 

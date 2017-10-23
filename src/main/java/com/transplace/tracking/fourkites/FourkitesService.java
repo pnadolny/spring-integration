@@ -9,6 +9,7 @@ public class FourkitesService {
 
     public void process(Message<StopUpdate> msg) {
 
+        System.out.println(msg);
 
         msg.getHeaders();
         msg.getPayload();
