@@ -1,4 +1,4 @@
-package com.transplace.tracking;
+package com.transplace.tracking.macropoint;
 
 import org.springframework.stereotype.Service;
 

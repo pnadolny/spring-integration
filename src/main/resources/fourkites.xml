@@ -8,40 +8,33 @@
 
 
 
-
-
-    <!-- Setup -->
-
     <integration-http:inbound-gateway id="fourkiteInboundGateway"
                                       path="/restfullservices/fourkites"
                                       supported-methods="POST"
-                                      request-channel="fourkiteChannel"
+                                      request-channel="fourkiteQueueChannel"
                                       request-payload-type="com.transplace.tracking.fourkites.beans.StopUpdate">
-
         <integration-http:request-mapping consumes="application/json" produces="application/json" />
-
-
     </integration-http:inbound-gateway>
 
-    <integration:channel id="fourkiteChannel"/>
+    <!-- Recommend to set capacity and not setup an unbound queue-->
+    <integration:channel id="fourkiteQueueChannel">
+        <integration:queue capacity="100"></integration:queue>
+    </integration:channel>
 
-
-    <integration:logging-channel-adapter id="logging" channel="fourkiteChannel" level="INFO" log-full-message="true"/>
+    <integration:logging-channel-adapter id="logging" channel="fourkiteQueueChannel" log-full-message="true"/>
 
 
     <integration:service-activator
             id="fourkiteServiceActivator"
-            input-channel="fourkiteChannel"
-            ref="fourkitesService" method="process"/>
+            input-channel="fourkiteQueueChannel"
+            ref="fourkitesService" method="process">
+
+        <integration:poller fixed-rate="5000"/>
+    </integration:service-activator>
 
 
 
 
-    <jms:message-driven-channel-adapter
-            id="fourkiteJMSAdapater"
-            destination="fourkitesQueue"
-            connection-factory="jmsConnectionFactory"
-            channel="fourkiteChannel"/>
 
 
 

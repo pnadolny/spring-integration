@@ -7,30 +7,21 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd">
 
 
-    <integration-http:inbound-gateway id="macropointInboundGateway"
-                                      path="/restfullservices/macropoint"
+    <integration-http:inbound-gateway id="tenFourInboundGateway"
+                                      path="/restfullservices/tenfour/position"
                                       supported-methods="POST"
-                                      request-channel="macroChannel" request-payload-type="com.transplace.tracking.fourkites.beans.StopUpdate">
+                                      request-channel="tenFourChannel" request-payload-type="com.transplace.tracking.tenFour.beans.Position">
 
         <integration-http:request-mapping consumes="application/json" produces="application/json" />
 
     </integration-http:inbound-gateway>
 
 
-    <integration:logging-channel-adapter id="logging" channel="macroChannel" level="INFO" log-full-message="true"/>
+    <integration:logging-channel-adapter id="logging" channel="tenFourChannel" level="INFO" log-full-message="true"/>
 
 
-    <jms:message-driven-channel-adapter
-            id="macropointJMSAdapater"
-            destination="macropointQueue"
-            connection-factory="jmsConnectionFactory"
-            channel="macroChannel"/>
 
-    <integration:channel id="macroChannel"/>
+    <integration:channel id="tenFourChannel"/>
 
-    <integration:service-activator
-            id="macroServiceActivator"
-            input-channel="macroChannel"
-            ref="macroService" method="sayHello"/>
 
 </beans>
