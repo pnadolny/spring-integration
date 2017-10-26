@@ -12,7 +12,9 @@
                                       request-channel="fourkiteQueueChannel"
                                       request-payload-type="com.transplace.tracking.fourkites.beans.StopUpdate">
         <integration-http:request-mapping consumes="application/json" produces="application/json" />
+        <integration-http:header name="PROVIDER" expression="'FOURKITES'"/>
     </integration-http:inbound-gateway>
+
 
     <integration:channel id="fourkiteQueueChannel">
         <integration:queue capacity="100" ></integration:queue>
