@@ -40,14 +40,14 @@
         <integration:poller fixed-rate="1000" max-messages-per-poll="10"/>
     </integration:logging-channel-adapter>
 
-
+<!--
     <integration-http:outbound-gateway request-channel="outboundTMS"
                                url="http://localhost:8080/http/receiveGateway"
                                http-method="POST"
                                        expected-response-type="java.lang.String">
         <integration:poller fixed-rate="1000" max-messages-per-poll="10"/>
 
-    </integration-http:outbound-gateway>
+    </integration-http:outbound-gateway> -->
 
 
 </beans>
