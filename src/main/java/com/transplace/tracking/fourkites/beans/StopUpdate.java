@@ -5,7 +5,11 @@
  **********************/
 package com.transplace.tracking.fourkites.beans;
 
+ import com.fasterxml.jackson.annotation.JsonProperty;
+
  public class StopUpdate  {
+     @JsonProperty("ProNumber")
+     private String proNumber;
 
      public String getProNumber() {
          return proNumber;
@@ -15,6 +19,5 @@ package com.transplace.tracking.fourkites.beans;
          this.proNumber = proNumber;
      }
 
-     private String proNumber;
 
  }

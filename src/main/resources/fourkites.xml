@@ -19,26 +19,47 @@
         <integration:queue capacity="100" ></integration:queue>
     </integration:channel>
 
-
-    <integration:logging-channel-adapter channel="fourkiteQueueChannel" log-full-message="true">
-        <integration:poller fixed-rate="1000" max-messages-per-poll="10"/>
-    </integration:logging-channel-adapter>
-
-
-   <integration:service-activator output-channel="outboundTMS"
-                                  input-channel="fourkiteQueueChannel"
-                                  ref="fourkitesTransformerService" method="transform">
-        <integration:poller fixed-rate="1000" max-messages-per-poll="10"/>
-    </integration:service-activator>
-
+    <integration:channel id="trackingChannel">
+        <!-- Recommend to set capacity and not setup an unbound queue-->
+        <integration:queue capacity="100" ></integration:queue>
+    </integration:channel>
 
     <integration:channel id="outboundTMS">
         <integration:queue capacity="100" ></integration:queue>
     </integration:channel>
 
+
+    <integration:logging-channel-adapter channel="fourkiteQueueChannel" log-full-message="true" >
+        <integration:poller fixed-rate="1000" max-messages-per-poll="10"/>
+    </integration:logging-channel-adapter>
+
+    <integration:logging-channel-adapter channel="trackingChannel" log-full-message="true">
+        <integration:poller fixed-rate="1000" max-messages-per-poll="10"/>
+    </integration:logging-channel-adapter>
+
     <integration:logging-channel-adapter channel="outboundTMS" log-full-message="true">
         <integration:poller fixed-rate="1000" max-messages-per-poll="10"/>
     </integration:logging-channel-adapter>
+
+
+   <integration:service-activator
+           input-channel="fourkiteQueueChannel"
+           output-channel="trackingChannel"
+           ref="fourkitesTransformerService"
+           method="transform">
+        <integration:poller fixed-rate="1000" max-messages-per-poll="10"/>
+    </integration:service-activator>
+
+    <integration:service-activator
+            input-channel="trackingChannel"
+            output-channel="outboundTMS"
+            ref="checkCallService"
+            method="transform">
+        <integration:poller fixed-rate="1000" max-messages-per-poll="10"/>
+    </integration:service-activator>
+
+
+
 
 <!--
     <integration-http:outbound-gateway request-channel="outboundTMS"

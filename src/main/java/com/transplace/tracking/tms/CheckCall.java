@@ -1,5 +1,7 @@
 package com.transplace.tracking.tms;
 
+import org.springframework.core.style.ToStringCreator;
+
 public class CheckCall {
 
     public String getCheckCallType() {
@@ -11,4 +13,8 @@ public class CheckCall {
     }
 
     private String checkCallType;
+
+    public String toString() {
+        return new ToStringCreator(this).toString();
+    }
 }
