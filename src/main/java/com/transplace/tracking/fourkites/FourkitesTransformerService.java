@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class FourkitesTransformerService {
 
-    public void transform(Message<StopUpdate> msg) {
+    public Message<StopUpdate> transform(Message<StopUpdate> msg) {
         msg.getHeaders();
         msg.getPayload();
+        return msg;
     }
 
 }

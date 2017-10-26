@@ -6,7 +6,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd   http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd">
 
 
-    <integration-http:inbound-gateway
+    <integration-http:inbound-gateway id="fourkiteInboundGateway"
                                       path="/restfullservices/fourkites"
                                       supported-methods="POST"
                                       request-channel="fourkiteQueueChannel"
@@ -35,6 +35,11 @@
     <integration:channel id="outboundTMS">
         <integration:queue capacity="100" ></integration:queue>
     </integration:channel>
+
+    <integration:logging-channel-adapter channel="outboundTMS" log-full-message="true">
+        <integration:poller fixed-rate="1000" max-messages-per-poll="10"/>
+    </integration:logging-channel-adapter>
+
 
     <integration-http:outbound-gateway request-channel="outboundTMS"
                                url="http://localhost:8080/http/receiveGateway"
