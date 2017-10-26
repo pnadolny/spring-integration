@@ -1,4 +1,4 @@
-package com.transplace.tracking.beans;
+package com.transplace.tracking.order.beans;
 
 public class TrackingOrder {
 

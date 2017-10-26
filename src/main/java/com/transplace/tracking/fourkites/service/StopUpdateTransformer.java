@@ -1,17 +1,15 @@
-package com.transplace.tracking.fourkites;
+package com.transplace.tracking.fourkites.service;
 
-import com.transplace.tracking.beans.TrackingOrder;
+import com.transplace.tracking.order.beans.TrackingOrder;
 import com.transplace.tracking.fourkites.beans.StopUpdate;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FourkitesTransformerService {
+public class StopUpdateTransformer {
 
     public Message<TrackingOrder> transform(Message<StopUpdate> msg) {
-        msg.getHeaders();
-        msg.getPayload();
 
         Message<TrackingOrder> trackingOrderMessage = new Message<TrackingOrder>() {
             @Override

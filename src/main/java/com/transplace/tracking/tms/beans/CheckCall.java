@@ -1,4 +1,4 @@
-package com.transplace.tracking.tms;
+package com.transplace.tracking.tms.beans;
 
 import org.springframework.core.style.ToStringCreator;
 
