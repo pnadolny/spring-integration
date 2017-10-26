@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
 //@ImportResource("classpath*:/integration.xml")
-@ImportResource({"classpath:fourkites.xml", "classpath:macropoint.xml","classpath:tenfour.xml"})
+@ImportResource({"classpath:fourkites.xml"})
 
 public class Application {
 

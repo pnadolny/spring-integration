@@ -5,16 +5,11 @@ import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FourkitesService {
+public class FourkitesTransformerService {
 
-    public void process(Message<StopUpdate> msg) {
-
-        System.out.println(msg);
-
+    public void transform(Message<StopUpdate> msg) {
         msg.getHeaders();
         msg.getPayload();
-
-
     }
 
 }
