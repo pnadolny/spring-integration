@@ -6,13 +6,14 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd   http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd">
 
 
-    <integration-http:inbound-gateway id="fourkiteInboundGateway"
+    <integration-http:inbound-gateway
                                       path="/restfullservices/fourkites"
                                       supported-methods="POST"
                                       request-channel="fourkiteQueueChannel"
                                       request-payload-type="com.transplace.tracking.fourkites.beans.StopUpdate">
         <integration-http:request-mapping consumes="application/json" produces="application/json" />
         <integration-http:header name="PROVIDER" expression="'FOURKITES'"/>
+        <integration-http:header name="KAFKA-TOPIC" expression="'FOURKITES-STOP-UPDATE'"/>
     </integration-http:inbound-gateway>
 
 
@@ -30,6 +31,14 @@
         </integration:interceptors>
     </integration:channel>
 
+    <integration:channel id="trackingHistoryChannel">
+        <integration:queue capacity="100" ></integration:queue>
+        <integration:interceptors>
+            <integration:wire-tap channel="logger"/>
+        </integration:interceptors>
+    </integration:channel>
+
+
     <integration:channel id="outboundTMS">
         <integration:queue capacity="100" ></integration:queue>
         <integration:interceptors>
@@ -42,7 +51,18 @@
 
     <integration:poller id="poller" fixed-rate="1000" max-messages-per-poll="10"/>
 
-   <integration:service-activator
+
+    <integration:service-activator
+            input-channel="fourkiteQueueChannel"
+            output-channel="trackingChannel"
+            ref="inboundProducer"
+            method="send">
+        <integration:poller ref="poller"/>
+    </integration:service-activator>
+
+
+
+    <integration:service-activator
            input-channel="fourkiteQueueChannel"
            output-channel="trackingChannel"
            ref="stopUpdateTransformer"
@@ -58,6 +78,13 @@
         <integration:poller ref="poller"/>
     </integration:service-activator>
 
+    <integration:service-activator
+            input-channel="trackingChannel"
+            output-channel="trackingHistoryChannel"
+            ref="historyService"
+            method="process">
+        <integration:poller ref="poller"/>
+    </integration:service-activator>
 
 
 
